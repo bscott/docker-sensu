@@ -12,16 +12,17 @@ do
 	else
 		REPO="${Array[0]}"
 		PLUGIN="${Array[1]}"
+		VERSION="${Array[2]}"
 	fi
 
-	wget https://github.com/$REPO/sensu-plugins-$PLUGIN/archive/master.tar.gz
-	tar -xzvf master.tar.gz
+	wget https://github.com/$REPO/sensu-plugins-$PLUGIN/archive/$VERSION.tar.gz
+	tar -xzvf $VERSION.tar.gz
 	rm *.tar.gz
-	cd sensu-plugins-$PLUGIN-master
+	cd $VERSION
 	sed -i'' '/signing_key/d' sensu-plugins-$PLUGIN.gemspec #We don't have the private key
 	gem build sensu-plugins-$PLUGIN.gemspec
 	gem uninstall -x sensu-plugins-$PLUGIN
 	gem install --no-ri --no-rdoc sensu-plugins-*.gem
 	cd ..
-	rm -rf sensu-plugins-$PLUGIN-master
+	rm -rf $VERSION
 done
